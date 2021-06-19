@@ -15,6 +15,16 @@
             </div>
         </div>
     </div>
+
+    {% if request.user == question.author %}
+    <div class="my-3">
+        <a href="{% url 'pybo:question_modify' question.id %}"
+           class="btn btn-sm btn-outline-secondary">수정</a>
+        <a href="#" class="delete btn btn-sm btn-outline-secondary"
+           data-uri="{% url 'pybo:question_delete' question.id %}">삭제</a>
+    </div>
+    {% endif %}
+
     <h5 class="border-bottom my-3 py-2">
         {{question.answer_set.count}} 개의 답변이 있습니다.
     </h5>
