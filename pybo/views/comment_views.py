@@ -98,7 +98,7 @@ def comment_modify_answer(request, comment_id):
 
 
 @login_required(login_url='common:login')
-def comment_modify_answer(request, comment_id):
+def comment_delete_answer(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     if request.user != comment.author:
         messages.error(request, '댓글수정권한이 없습니다.')
