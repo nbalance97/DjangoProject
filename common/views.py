@@ -1,6 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
+
 from django.contrib.auth import authenticate, login
-from common.forms import UserForm
+from django.contrib.auth.models import User
+from braces.views import LoginRequiredMixin, UserPassesTestMixin
+
+from django.views.generic import UpdateView
+
+from common.forms import UserForm, UserModifyForm
 
 # Create your views here.
 def signup(request):
@@ -16,3 +22,19 @@ def signup(request):
     else:
         form = UserForm()
     return render(request, 'common/signup.html', {'form': form})
+
+class UserModifyView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = User
+    form_class = UserModifyForm
+    template_name = 'common/signup.html'
+    pk_url_kwarg = 'user_id'
+
+    def get_success_url(self):
+        return reverse('index')
+
+    def test_func(self, user):
+	    return self.request.user == user
+
+
+
+
