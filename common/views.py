@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.models import User
 from braces.views import LoginRequiredMixin, UserPassesTestMixin
 
@@ -35,6 +36,18 @@ class UserModifyView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self, user):
 	    return self.request.user == user
 
+class UserPasswordChangeView(
+    LoginRequiredMixin, UserPassesTestMixin, PasswordChangeView
+    ):
+    model = User
+    template_name = 'common/passwordchange.html'
+    pk_url_kwarg = 'user_id'
+
+    def get_success_url(self):
+        return reverse('index')
+
+    def test_func(self, user):
+        return self.request.user == user
 
 
 

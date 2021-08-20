@@ -14,3 +14,4 @@ class UserModifyForm(UserChangeForm):
     class Meta:
         model = User
         fields = ("username", "email",)
+
