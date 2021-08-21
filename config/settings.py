@@ -129,3 +129,6 @@ STATICFILES_DIRS = [
 ]
 
 LOGIN_URL = "login" 
+
+MEDIA_ROOT = BASE_DIR + "/upload_media"
+MEDIA_URL = "/uploads/"

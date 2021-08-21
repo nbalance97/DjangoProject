@@ -49,6 +49,10 @@
                             <div>{{question.create_date}}</div>
                         </div>
                     </div>
+                    {% if question.image %}
+                        <img src="{{ question.image.url }}" style="width: 75%; align: center;">
+                    {% endif %}
+
                     {% if question.comment_set.count > 0 %}
                     <div class="mt-3">
                         {% for comment in question.comment_set.all %}
