@@ -1,7 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<script>
+    function search(p) {
+        let query = document.getElementById("search_text").value;
+        window.location.href = "?query=" + query;
+    }
+
+</script>
+
+
 <div class="container my-3">
+    <div style="margin-bottom: 5px;"> 
+        <input type="text" id="search_text">
+        <input type="button" id="search_btn" onclick="search(this);" value="검색">
+    </div>
     <table class="table">
         <thead>
         <tr class="thead-dark">
@@ -88,4 +101,5 @@
     </ul>
     <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">질문 등록하기</a>
 </div>
+
 {% endblock %}

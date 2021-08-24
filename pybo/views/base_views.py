@@ -5,7 +5,8 @@ from ..models import Question
 
 def index(request):
     page = request.GET.get('page', '1')
-    question_list = Question.objects.order_by('-create_date')
+    query = request.GET.get('query', '')
+    question_list = Question.objects.filter(subject__contains=query).order_by('-create_date')
     paginator = Paginator(question_list, 10)
     page_obj = paginator.get_page(page)
     context = {'question_list': page_obj}
