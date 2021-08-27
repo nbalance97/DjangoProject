@@ -8,6 +8,12 @@
                 location.href = $(this).data('uri');
             }
         });
+
+        $(".accept").on('click', function() {
+            if (confirm("정말로 채택하시겠습니까?")) {
+                location.href = $(this).data('uri');
+            }
+        });
     });
 </script>
 {% endblock %}
@@ -103,12 +109,17 @@
             </div>
             <a href="#" data-uri="{% url 'pybo:vote_answer' answer.id %}"
                class="recommend btn btn-sm btn-secondary btn-block my-1">추천</a>
-            <a href="#" data-uri="{% url 'pybo:vote_answer' answer.id %}"
-               class="recommend btn btn-sm btn-secondary btn-block my-1">채택</a>
+            <a href="#" data-uri="{% url 'pybo:answer_accept' answer.id %}"
+               class="accept btn btn-sm btn-secondary btn-block my-1">채택</a>
         </div>
         <div class="col-11">
             <div class="card">
                 <div class="card-body">
+                    {% if answer.accepted %}
+                    <div class="badge badge-success p-1 text-center mx-0">
+                        <div class="mb-2">채택된 답변</div>
+                    </div>    
+                    {% endif %}
                     <div class="card-text" style="white-space: pre-line;">
                         {{ answer.content }}
                     </div>
@@ -126,7 +137,7 @@
                     </div>
                     {% if request.user == answer.author %}
                     <div class="my-3">
-                        <a href="{ url 'pybo:answer_modify' answer.id %}" class="btn btn-sm btn-outline-secondary">
+                        <a href="{% url 'pybo:answer_modify' answer.id %}" class="btn btn-sm btn-outline-secondary">
                             수정
                         </a>
                         <a href="{% url 'pybo:answer_delete' answer.id %}" class="delete btn btn-sm btn-outline-secondary">삭제</a>

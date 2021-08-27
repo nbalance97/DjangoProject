@@ -55,3 +55,13 @@ def answer_delete(request, answer_id):
     else:
         answer.delete()
     return redirect('pybo:detail', question_id=answer.question.id)
+
+@login_required(login_url='common:login')
+def answer_accept(request, answer_id):
+    answer = get_object_or_404(Answer, pk=answer_id)
+    if request.user != answer.question.author:
+        messages.error(request, '채택권한이 없습니다.')
+    else:
+        answer.accepted = True
+        answer.save()
+    return redirect('pybo:detail', question_id=answer.question.id)
