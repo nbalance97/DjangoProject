@@ -19,10 +19,12 @@ class Question(models.Model):
 class Answer(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_answer')
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    accepted = models.BooleanField(default=False)
     modify_date = models.DateTimeField(null=True, blank=True)
     content = models.TextField()
     create_date = models.DateTimeField()
     voter = models.ManyToManyField(User, related_name='voter_answer')
+    
 
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
