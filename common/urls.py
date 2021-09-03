@@ -19,5 +19,10 @@ urlpatterns = [
         'pmodify/<int:user_id>', 
         views.UserPasswordChangeView.as_view(), 
         name='password_modify'
-    )
+    ),
+    path(
+        'profile/<int:user_id>',
+        views.UserProfileView.as_view(),
+        name='profile_view'
+    ),
 ]

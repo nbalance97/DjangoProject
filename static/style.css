@@ -1,4 +1,44 @@
+* {
+    box-sizing: border-box;
+}
+
 .comment {
     border-top:dotted 1px #ddd;
     font-size:0.7em;
+}
+
+.profile {
+    width: 20%;
+    height: 400px;
+    background-color: #F6F6F6;
+    border-radius: 10px;
+    padding: 30px;
+    margin: 10px;
+}
+
+.question_box {
+    width: 70%;
+    height: 100%;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.enrolled-question {
+    width: 100%;
+    height: 450px;
+    background-color: #F6F6F6;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.answered-question {
+    background-color: #F6F6F6;
+    border-radius: 10px;
+    width: 100%;
+    height: 450px;
+}
+
+.profile-text {
+    text-align: center; 
+    font-size: 18px;
 }

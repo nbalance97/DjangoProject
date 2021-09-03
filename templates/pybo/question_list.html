@@ -6,7 +6,6 @@
         let query = document.getElementById("search_text").value;
         window.location.href = "?query=" + query;
     }
-
 </script>
 
 
@@ -47,7 +46,7 @@
                     {% endif %}
                 </a>
             </td>
-            <td>{{question.author.username}}</td>
+            <td><a href="{% url 'common:profile_view' question.author.id %}">{{question.author.username}}</a></td>
             <td>{{question.create_date}}</td>
         </tr>
         {% endfor %}

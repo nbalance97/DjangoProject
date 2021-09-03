@@ -5,7 +5,9 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.models import User
 from braces.views import LoginRequiredMixin, UserPassesTestMixin
 
-from django.views.generic import UpdateView
+from pybo.models import Answer
+
+from django.views.generic import UpdateView, DetailView
 
 from common.forms import UserForm, UserModifyForm
 
@@ -48,6 +50,18 @@ class UserPasswordChangeView(
 
     def test_func(self, user):
         return self.request.user == user
+
+class UserProfileView(DetailView):
+    model = User
+    template_name = 'common/profile.html'
+    pk_url_kwarg = 'user_id'
+    context_object_name = "target_user"
+
+    def get_context_data(self, **kwargs):
+        queryset = super().get_context_data(**kwargs)
+        target_user = self.get_object()
+        queryset["total_accepted"] = Answer.objects.filter(author=target_user, accepted=True).count()
+        return queryset
 
 
 

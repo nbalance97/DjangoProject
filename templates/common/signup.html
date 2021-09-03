@@ -5,7 +5,7 @@
         <div class="col-4">
             {% if request.user.is_authenticated %}
                 <h4>회원정보 수정</h4>
-                변경할 정보를 입력 후 비밀번호를 입력해주세요.
+                <p>변경할 정보를 입력 후 비밀번호를 입력해주세요.</p>
                 <a href="{% url 'common:password_modify' request.user.id %}">비밀번호 변경</a>
             {% else %}
                 <h4>회원가입</h4>
@@ -42,7 +42,7 @@
             <input type="text" class="form-control" name="email" id="email"
                    value="{{ form.email.value|default_if_none:'' }}">
         </div>
-        <button type="submit" class="btn btn-primary">생성하기</button>
+        <button type="submit" class="btn btn-primary">{% if request.user.is_authenticated %}변경하기{%else%}생성하기{%endif%}</button>
     </form>
 </div>
 {% endblock %}

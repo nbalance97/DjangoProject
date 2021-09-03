@@ -1,0 +1,78 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+    <div class="row" style="padding: 10px;">
+        <div class="profile">
+            <p class="profile-text">현재 선택된 유저명</p>
+            <p class="profile-text">{{ target_user.username }}</p>
+            <p class="profile-text" style="margin-top:30px;">답변한 게시글의 수</p>
+            <p class="profile-text">{{ target_user.author_answer.all.count }}</p>
+            <p class="profile-text">질문한 게시글의 수</p>
+            <p class="profile-text">{{ target_user.author_question.all.count }}</p>
+            <p class="profile-text">채택된 게시글의 수</p>
+            <p class="profile-text">{{ total_accepted }}</p>
+        </div>
+        <div class="question_box">
+            <div class="enrolled-question" style="padding: 10px; overflow: auto;">
+                <p style="text-align: center; font-size:24px;">질문한 게시글 리스트</p>
+                <table class="table">
+                    <tr>
+                        <th>번호</th>
+                        <th>추천</th>
+                        <th style="width:50%">제목</th>
+                        <th>글쓴이</th>
+                        <th>작성일시</th>
+                    </tr>
+                    {% for question in target_user.author_question.all %}
+                        <tr>
+                            <td>{{ question.id }}</td>
+                            <td>
+                                {% if question.voter.all.count > 0 %}
+                                <span class="badge badge-warning px-2 py-1">
+                                    {{ question.voter.all.count }}
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td class="text-left">
+                                <a href="{% url 'pybo:detail' question.id %}">
+                                    {{question.subject}}
+                                </a>
+                            </td>
+                            <td><a href="{% url 'common:profile_view' question.author.id %}">{{question.author.username}}</a></td>
+                            <td>{{question.create_date}}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="answered-question" style="padding: 10px; overflow: scroll;">
+                <p style="text-align: center; font-size:24px;">답변한 게시글 리스트</p>
+                <table class="table">
+                    <tr>
+                        <th>번호</th>
+                        <th>채택여부</th>
+                        <th style="width:50%">제목</th>
+                        <th>글쓴이</th>
+                        <th>작성일시</th>
+                    </tr>
+                    {% for answer in target_user.author_answer.all %}
+                        <tr>
+                            <td>{{ answer.question.id }}</td>
+                            <td>
+                                {% if answer.accepted %}
+                                <span class="badge badge-success px-2 py-1">채택</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-left">
+                                <a href="{% url 'pybo:detail' answer.question.id %}">
+                                    {{answer.question.subject}}
+                                </a>
+                            </td>
+                            <td><a href="{% url 'common:profile_view' answer.question.author.id %}">{{answer.question.author.username}}</a></td>
+                            <td>{{answer.question.create_date}}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
