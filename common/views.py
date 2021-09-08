@@ -5,9 +5,12 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.models import User
 from braces.views import LoginRequiredMixin, UserPassesTestMixin
 
-from pybo.models import Answer
+from django.db.models import Count
+
+from pybo.models import Answer, Question
 
 from django.views.generic import UpdateView, DetailView
+from django.core.paginator import Paginator
 
 from common.forms import UserForm, UserModifyForm
 
@@ -60,7 +63,19 @@ class UserProfileView(DetailView):
     def get_context_data(self, **kwargs):
         queryset = super().get_context_data(**kwargs)
         target_user = self.get_object()
+
+        questions_page = self.request.GET.get('questions_page', 1)
+        answer_page = self.request.GET.get('answer_page', 1)
+
+        question_paginator = Paginator(target_user.author_question.all().order_by('id'), 6)
+
+        answer_question = target_user.author_answer.values('question').distinct()
+        answer_question = Question.objects.filter(id__in=answer_question)
+        answer_paginator = Paginator(answer_question, 6)
+
         queryset["total_accepted"] = Answer.objects.filter(author=target_user, accepted=True).count()
+        queryset['target_questions'] = question_paginator.get_page(questions_page)
+        queryset['target_answered_questions'] = answer_paginator.get_page(answer_page)
         return queryset
 
 

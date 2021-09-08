@@ -24,6 +24,9 @@ class Answer(models.Model):
     content = models.TextField()
     create_date = models.DateTimeField()
     voter = models.ManyToManyField(User, related_name='voter_answer')
+
+    def __str__(self):
+        return "" + str(self.id)
     
 
 class Comment(models.Model):
