@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render,get_object_or_404
-from ..models import Question
+from ..models import Question, Answer
 
 
 def index(request):
@@ -16,5 +16,11 @@ def index(request):
 
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    context = {'question': question}
+    answer_page_id = request.GET.get('page', '1')
+    
+    # Answer Pagination
+    paginator = Paginator(Answer.objects.filter(question=question), 3)
+    page_obj = paginator.get_page(answer_page_id)
+
+    context = {'question': question, 'answer_list': page_obj}
     return render(request, 'pybo/question_detail.html', context)

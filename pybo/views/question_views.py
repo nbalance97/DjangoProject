@@ -37,6 +37,8 @@ def question_modify(request, question_id):
             question = form.save(commit=False)
             question.author = request.user
             question.modify_date = timezone.now()
+            if request.FILES.get('image') != None:
+                question.image = request.FILES['image']
             question.save()
             return redirect('pybo:detail', question_id=question.id)
     else:
