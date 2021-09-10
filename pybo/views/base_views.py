@@ -17,7 +17,11 @@ def index(request):
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     answer_page_id = request.GET.get('page', '1')
-    
+
+    # 조회수 갱신
+    question.hits += 1
+    question.save()
+
     # Answer Pagination
     paginator = Paginator(Answer.objects.filter(question=question), 3)
     page_obj = paginator.get_page(answer_page_id)

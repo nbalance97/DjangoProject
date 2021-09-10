@@ -43,6 +43,13 @@
                     <div class="card-text" style="white-space: pre-line;">
                         {{question.content|safe}}
                     </div>
+                    {% if question.image %}
+                    <div class="row justify-content-center ">
+                        <div class="col-sm-8 mb-5">
+                            <img src="{{ question.image.url }}" style="width: 100%">
+                        </div>
+                    </div>
+                    {% endif %}
                     <div class="d-flex justify-content-end">
                         {% if question.modify_date %}
                         <div class="badge badge-light p-2 text-left mx-3">
@@ -55,9 +62,6 @@
                             <div>{{question.create_date}}</div>
                         </div>
                     </div>
-                    {% if question.image %}
-                        <img src="{{ question.image.url }}" style="width: 75%; align: center;">
-                    {% endif %}
 
                     {% if question.comment_set.count > 0 %}
                     <div class="mt-3">

@@ -22,6 +22,7 @@
             <th style="width:50%">제목</th>
             <th>글쓴이</th>
             <th>작성일시</th>
+            <th>조회수</th>
         </tr>
         </thead>
         <tbody>
@@ -48,6 +49,7 @@
             </td>
             <td><a href="{% url 'common:profile_view' question.author.id %}">{{question.author.username}}</a></td>
             <td>{{question.create_date}}</td>
+            <td>{{question.hits}}</td>
         </tr>
         {% endfor %}
 

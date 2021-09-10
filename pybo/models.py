@@ -11,6 +11,7 @@ class Question(models.Model):
     create_date = models.DateTimeField()
     voter = models.ManyToManyField(User, related_name='voter_question')
     image = models.ImageField(blank=True, upload_to='Question_media')
+    hits = models.IntegerField(default=0)
 
     def __str__(self):
         return self.subject

@@ -64,14 +64,15 @@ class UserProfileView(DetailView):
         queryset = super().get_context_data(**kwargs)
         target_user = self.get_object()
 
-        questions_page = self.request.GET.get('questions_page', 1)
+        questions_page = self.request.GET.get('question_page', 1)
         answer_page = self.request.GET.get('answer_page', 1)
 
-        question_paginator = Paginator(target_user.author_question.all().order_by('id'), 6)
 
-        answer_question = target_user.author_answer.values('question').distinct()
-        answer_question = Question.objects.filter(id__in=answer_question)
-        answer_paginator = Paginator(answer_question, 6)
+        question_paginator = Paginator(target_user.author_question.all().order_by('id'), 5)
+
+        answer_question = target_user.author_answer.values('question').distinct() # 유저가 작성한 답변을 포함한 게시글을 중복 없이 가져옴
+        answer_question = Question.objects.filter(id__in=answer_question).order_by('id') # 해당 question들을 가져옴
+        answer_paginator = Paginator(answer_question, 5)
 
         queryset["total_accepted"] = Answer.objects.filter(author=target_user, accepted=True).count()
         queryset['target_questions'] = question_paginator.get_page(questions_page)

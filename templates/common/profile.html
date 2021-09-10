@@ -35,6 +35,45 @@
                         </tr>
                     {% endfor %}
                 </table>
+                <ul class="pagination justify-content-center">
+                    {% if target_questions.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?question_page={{target_questions.previous_page_number}}&answer_page={{ target_answered_questions.number }}">이전</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+                    </li>
+                    {% endif %}
+            
+                    {% for page_number in target_questions.paginator.page_range %}
+                    {% if page_number >= target_questions.number|add:-3 and page_number <= target_questions.number|add:3 %}
+                        {% if page_number == target_questions.number %} <!-- 현재 페이지인 경우 다르게 표시 -->
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="?question_page={{ page_number }}&answer_page={{ target_answered_questions.number }}">
+                                {{ page_number }}
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?question_page={{ page_number }}&answer_page={{ target_answered_questions.number }}">
+                                {{ page_number }}
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+                    {% endfor %}
+            
+                    {% if target_questions.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?question_page={{ target_questions.next_page_number }}&answer_page={{ target_answered_questions.number }}">다음</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
             <div class="answered-question" style="padding: 10px; overflow: scroll;">
                 <p style="text-align: center; font-size:24px;">답변한 게시글</p>
@@ -58,6 +97,45 @@
                         </tr>
                     {% endfor %}
                 </table>
+                <ul class="pagination justify-content-center">
+                    {% if target_answered_questions.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?question_page={{target_questions.number}}&answer_page={{target_answered_questions.previous_page_number}}">이전</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+                    </li>
+                    {% endif %}
+            
+                    {% for page_number in target_answered_questions.paginator.page_range %}
+                    {% if page_number >= target_answered_questions.number|add:-3 and page_number <= target_answered_questions.number|add:3 %}
+                        {% if page_number == target_answered_questions.number %} <!-- 현재 페이지인 경우 다르게 표시 -->
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="?question_page={{ target_questions.number }}&answer_page={{page_number}}">
+                                {{ page_number }}
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?question_page={{ target_questions.number }}&answer_page={{page_number}}">
+                                {{ page_number }}
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+                    {% endfor %}
+            
+                    {% if target_answered_questions.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?question_page={{ target_questions.number }}&answer_page={{ target_answered_questions.next_page_number }}">다음</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
     </div>
