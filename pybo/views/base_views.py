@@ -9,7 +9,14 @@ def index(request):
     question_list = Question.objects.filter(subject__contains=query).order_by('-create_date')
     paginator = Paginator(question_list, 10)
     page_obj = paginator.get_page(page)
-    context = {'question_list': page_obj}
+
+    greatest_hits_list = Question.objects.order_by('-hits')[:3]
+    #recently_answered_list = Answer.objects.order_by('question', '-create_date').values('question')
+
+    context = {
+        'question_list': page_obj,
+        'greatest_hits_list': greatest_hits_list, 
+    }
 
     return render(request, 'pybo/question_list.html', context)
 
