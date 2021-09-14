@@ -10,12 +10,27 @@ def index(request):
     paginator = Paginator(question_list, 10)
     page_obj = paginator.get_page(page)
 
+    # 최다 조회수
     greatest_hits_list = Question.objects.order_by('-hits')[:3]
-    #recently_answered_list = Answer.objects.order_by('question', '-create_date').values('question')
 
+    # 최근에 답변이 달린 게시글
+    temp = Answer.objects.order_by('-create_date').values('question')
+    recently_answered_list = []
+    duplicated = set()
+
+    # 하나의 게시글에 여러개의 답변이 달릴 수 있으므로 중복 제거
+    for answered_question in temp:
+        if answered_question['question'] not in duplicated:
+            duplicated.add(answered_question['question'])
+            recently_answered_list.append(answered_question['question'])
+            if len(recently_answered_list) == 3:
+                break
+
+    recently_answered_list = Question.objects.filter(id__in=recently_answered_list)
     context = {
         'question_list': page_obj,
         'greatest_hits_list': greatest_hits_list, 
+        'recently_answered_list': recently_answered_list,
     }
 
     return render(request, 'pybo/question_list.html', context)

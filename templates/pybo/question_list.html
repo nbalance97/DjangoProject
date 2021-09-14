@@ -28,11 +28,11 @@
                 </ul>
             </div>
             <div class="card">
-                <div class="card-header bg-white">최근 댓글</div>
+                <div class="card-header bg-white">최근 댓글달린 게시글</div>
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item">A</li>
-                  <li class="list-group-item">B</li>
-                  <li class="list-group-item">C</li>
+                    {% for post in recently_answered_list %}
+                        <li class="list-group-item"><a href="{% url 'pybo:detail' post.id %}" style="color: black;">{{ post.subject }}</a></li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>
