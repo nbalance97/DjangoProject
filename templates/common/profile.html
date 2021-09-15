@@ -1,141 +1,145 @@
 {% extends '../base.html' %}
 {% load static %}
 {% block content %}
-    <div class="row" style="margin: 20px; text-align: center;">
-        <div class="profile">
-            <p class="profile-text">현재 선택된 유저명</p>
-            <p class="profile-text">{{ target_user.username }}</p>
-            <p class="profile-text" style="margin-top:30px;">답변한 게시글의 수</p>
-            <p class="profile-text">{{ target_user.author_answer.all.count }}</p>
-            <p class="profile-text">질문한 게시글의 수</p>
-            <p class="profile-text">{{ target_user.author_question.all.count }}</p>
-            <p class="profile-text">채택된 게시글의 수</p>
-            <p class="profile-text">{{ total_accepted }}</p>
-        </div>
-        <div class="question_box">
-            <div class="enrolled-question" style="padding: 10px; overflow: auto;">
-                <p style="text-align: center; font-size:24px;">질문한 게시글</p>
-                <table class="table">
-                    <tr>
-                        <th>번호</th>
-                        <th style="width:50%">제목</th>
-                        <th>글쓴이</th>
-                        <th>작성일시</th>
-                    </tr>
-                    {% for question in target_questions.object_list %}
-                        <tr>
-                            <td>{{ question.id }}</td>
-                            <td class="text-center">
-                                <a href="{% url 'pybo:detail' question.id %}">
-                                    {{question.subject}}
-                                </a>
-                            </td>
-                            <td><a href="{% url 'common:profile_view' question.author.id %}">{{question.author.username}}</a></td>
-                            <td>{{question.create_date}}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-                <ul class="pagination justify-content-center">
-                    {% if target_questions.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?question_page={{target_questions.previous_page_number}}&answer_page={{ target_answered_questions.number }}">이전</a>
-                    </li>
-                    {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
-                    </li>
-                    {% endif %}
-            
-                    {% for page_number in target_questions.paginator.page_range %}
-                    {% if page_number >= target_questions.number|add:-3 and page_number <= target_questions.number|add:3 %}
-                        {% if page_number == target_questions.number %} <!-- 현재 페이지인 경우 다르게 표시 -->
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="?question_page={{ page_number }}&answer_page={{ target_answered_questions.number }}">
-                                {{ page_number }}
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="page-item">
-                            <a class="page-link" href="?question_page={{ page_number }}&answer_page={{ target_answered_questions.number }}">
-                                {{ page_number }}
-                            </a>
-                        </li>
-                        {% endif %}
-                    {% endif %}
-                    {% endfor %}
-            
-                    {% if target_questions.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?question_page={{ target_questions.next_page_number }}&answer_page={{ target_answered_questions.number }}">다음</a>
-                    </li>
-                    {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
-                    </li>
-                    {% endif %}
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+
+            <div class="col-9">
+                <ul class="list-group list-group-horizontal pt-5 mx-auto w-50 justify-content-center">
+                    <li class="list-group-item">{{ target_user.username }}</li>
+                    <li class="list-group-item">질문 : {{ target_user.author_answer.all.count }} 개</li>
+                    <li class="list-group-item">답변 : {{ target_user.author_question.all.count }} 개</li>
+                    <li class="list-group-item">채택 : {{ total_accepted }} 개</li>
                 </ul>
             </div>
-            <div class="answered-question" style="padding: 10px; overflow: scroll;">
-                <p style="text-align: center; font-size:24px;">답변한 게시글</p>
-                <table class="table">
-                    <tr>
-                        <th>번호</th>
-                        <th style="width:50%">제목</th>
-                        <th>글쓴이</th>
-                        <th>작성일시</th>
-                    </tr>
-                    {% for answer in target_answered_questions.object_list %}
-                        <tr>
-                            <td>{{ answer.id }}</td>
-                            <td class="text-center">
-                                <a href="{% url 'pybo:detail' answer.id %}">
-                                    {{answer.subject}}
-                                </a>
-                            </td>
-                            <td>{{answer.author.id}}</td>
-                            <td>{{answer.create_date}}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-                <ul class="pagination justify-content-center">
-                    {% if target_answered_questions.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?question_page={{target_questions.number}}&answer_page={{target_answered_questions.previous_page_number}}">이전</a>
-                    </li>
-                    {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
-                    </li>
-                    {% endif %}
-            
-                    {% for page_number in target_answered_questions.paginator.page_range %}
-                    {% if page_number >= target_answered_questions.number|add:-3 and page_number <= target_answered_questions.number|add:3 %}
-                        {% if page_number == target_answered_questions.number %} <!-- 현재 페이지인 경우 다르게 표시 -->
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="?question_page={{ target_questions.number }}&answer_page={{page_number}}">
-                                {{ page_number }}
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="page-item">
-                            <a class="page-link" href="?question_page={{ target_questions.number }}&answer_page={{page_number}}">
-                                {{ page_number }}
-                            </a>
-                        </li>
-                        {% endif %}
-                    {% endif %}
-                    {% endfor %}
-            
-                    {% if target_answered_questions.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?question_page={{ target_questions.number }}&answer_page={{ target_answered_questions.next_page_number }}">다음</a>
-                    </li>
-                    {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
-                    </li>
-                    {% endif %}
-                </ul>
+
+            <div class="col-9">
+                <div class="alter alter-light pt-5 mx-5">
+                    <div class="alter alter-light">
+                        <p style="text-align: center; font-size:24px;">내가 질문한 게시글</p>
+                        <table class="table">
+                            <tr class="table-dark">
+                                <th>번호</th>
+                                <th style="width:50%">제목</th>
+                                <th>글쓴이</th>
+                                <th>작성일시</th>
+                            </tr>
+                            {% for question in target_questions.object_list %}
+                                <tr>
+                                    <td>{{ question.id }}</td>
+                                    <td class="text-center">
+                                        <a href="{% url 'pybo:detail' question.id %}">
+                                            {{question.subject}}
+                                        </a>
+                                    </td>
+                                    <td><a href="{% url 'common:profile_view' question.author.id %}">{{question.author.username}}</a></td>
+                                    <td>{{question.create_date}}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        <ul class="pagination justify-content-center">
+                            {% if target_questions.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?question_page={{target_questions.previous_page_number}}&answer_page={{ target_answered_questions.number }}">이전</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+                            </li>
+                            {% endif %}
+                    
+                            {% for page_number in target_questions.paginator.page_range %}
+                            {% if page_number >= target_questions.number|add:-3 and page_number <= target_questions.number|add:3 %}
+                                {% if page_number == target_questions.number %} <!-- 현재 페이지인 경우 다르게 표시 -->
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link" href="?question_page={{ page_number }}&answer_page={{ target_answered_questions.number }}">
+                                        {{ page_number }}
+                                    </a>
+                                </li>
+                                {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?question_page={{ page_number }}&answer_page={{ target_answered_questions.number }}">
+                                        {{ page_number }}
+                                    </a>
+                                </li>
+                                {% endif %}
+                            {% endif %}
+                            {% endfor %}
+                    
+                            {% if target_questions.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?question_page={{ target_questions.next_page_number }}&answer_page={{ target_answered_questions.number }}">다음</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="alter alter-light pt-5">
+                        <p style="text-align: center; font-size:24px;">내가 답변한 게시글</p>
+                        <table class="table">
+                            <tr class="table-dark">
+                                <th>번호</th>
+                                <th style="width:50%">제목</th>
+                                <th>글쓴이</th>
+                                <th>작성일시</th>
+                            </tr>
+                            {% for answer in target_answered_questions.object_list %}
+                                <tr>
+                                    <td>{{ answer.id }}</td>
+                                    <td class="text-center">
+                                        <a href="{% url 'pybo:detail' answer.id %}">
+                                            {{answer.subject}}
+                                        </a>
+                                    </td>
+                                    <td>{{answer.author.id}}</td>
+                                    <td>{{answer.create_date}}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        <ul class="pagination justify-content-center">
+                            {% if target_answered_questions.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?question_page={{target_questions.number}}&answer_page={{target_answered_questions.previous_page_number}}">이전</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+                            </li>
+                            {% endif %}
+                    
+                            {% for page_number in target_answered_questions.paginator.page_range %}
+                            {% if page_number >= target_answered_questions.number|add:-3 and page_number <= target_answered_questions.number|add:3 %}
+                                {% if page_number == target_answered_questions.number %} <!-- 현재 페이지인 경우 다르게 표시 -->
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link" href="?question_page={{ target_questions.number }}&answer_page={{page_number}}">
+                                        {{ page_number }}
+                                    </a>
+                                </li>
+                                {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?question_page={{ target_questions.number }}&answer_page={{page_number}}">
+                                        {{ page_number }}
+                                    </a>
+                                </li>
+                                {% endif %}
+                            {% endif %}
+                            {% endfor %}
+                    
+                            {% if target_answered_questions.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?question_page={{ target_questions.number }}&answer_page={{ target_answered_questions.next_page_number }}">다음</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

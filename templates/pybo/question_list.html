@@ -12,7 +12,7 @@
 <div class="container-fluid my-3 px-5">
     <div class="row pb-2 justify-content-center"> 
         <div class="col-2"></div>
-        <div class="col-9 text-right">
+        <div class="col-9 text-end">
             <input type="text" style="margin-right:2px;" id="search_text">
             <input type="button" id="search_btn" onclick="search(this);" value="검색">
         </div>
@@ -23,7 +23,7 @@
                 <div class="card-header bg-white">조회수 TOP3</div>
                 <ul class="list-group list-group-flush">
                     {% for post in greatest_hits_list %}
-                        <li class="list-group-item"><a href="{% url 'pybo:detail' post.id %}" style="color:black">{{ post.subject }}</a></li>
+                        <li class="list-group-item"><a href="{% url 'pybo:detail' post.id %}" style="color:black;">{{ post.subject }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
@@ -39,7 +39,7 @@
         <div class="col-9 col-sm-9">
             <table class="table">
                 <thead>
-                <tr class="thead-dark">
+                <tr class="table-dark text-center">
                     <th style="width:8%">번호</th>
                     <th style="width:8%">추천</th>
                     <th style="width:50%">제목</th>
@@ -132,9 +132,8 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-2"></div>
-        <div class="col-9 text-right">
-            <!-- block-right : block 요소 정렬 -->
-            <a href="{% url 'pybo:question_create' %}" class="justify-content-end btn btn-primary">질문 등록하기</a>
+        <div class="col-9 text-end">
+            <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">질문 등록하기</a>
         </div>
     </div>
 </div>
