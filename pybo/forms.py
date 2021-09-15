@@ -12,6 +12,7 @@ class QuestionForm(forms.ModelForm):
             'content': '내용',
             'image': '이미지',
         }
+        
 
 
 class AnswerForm(forms.ModelForm):

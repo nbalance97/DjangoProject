@@ -42,7 +42,8 @@ def index(request):
 
 def board_posts(request, board_id):
     # 해당 게시판의 게시글 정보만 가져와서 진행
-    board_questions = Question.objects.filter(posttype=board_id).order_by('-create_date')
+    query = request.GET.get('query', '')
+    board_questions = Question.objects.filter(posttype=board_id, subject__icontains=query).order_by('-create_date')
 
     if board_id > MAXIMUM_POSTTYPE:
         raise Http404('올바르지 않은 게시판입니다.')
