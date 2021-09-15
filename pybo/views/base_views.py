@@ -3,17 +3,14 @@ from django.shortcuts import render,get_object_or_404
 from django.http import Http404
 from ..models import Question, Answer
 
-MAXIMUM_POSTTYPE = 4 # 최대 게시판 개수
-
-# 0 : 자유게시판
-# 1 : 파이썬 게시판
-# 2 : 자바 게시판
+MAXIMUM_POSTTYPE = 2 # 최대 게시판 개수
+POSTTYPE = ['자유 게시판', '파이썬 게시판', '자바 게시판']
 
 def index(request):
     page = request.GET.get('page', '1')
     query = request.GET.get('query', '')
     question_list = Question.objects.filter(subject__contains=query).order_by('-create_date')
-    paginator = Paginator(question_list, 3)
+    paginator = Paginator(question_list, 10)
     page_obj = paginator.get_page(page)
 
     # 최다 조회수
@@ -33,7 +30,7 @@ def index(request):
                 break
 
     recently_answered_list = Question.objects.filter(id__in=recently_answered_list)
-    
+
     context = {
         'question_list': page_obj,
         'greatest_hits_list': greatest_hits_list, 
@@ -44,7 +41,22 @@ def index(request):
     return render(request, 'pybo/question_list.html', context)
 
 def board_posts(request, board_id):
-    pass
+    # 해당 게시판의 게시글 정보만 가져와서 진행
+    board_questions = Question.objects.filter(posttype=board_id).order_by('-create_date')
+
+    if board_id > MAXIMUM_POSTTYPE:
+        raise Http404('올바르지 않은 게시판입니다.')
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(board_questions, 10)
+    page_obj = paginator.get_page(page)
+
+    context = {
+        'question_list': page_obj,
+        'posttype': POSTTYPE[board_id],
+    }
+
+    return render(request, 'pybo/board_question_list.html', context)
 
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)

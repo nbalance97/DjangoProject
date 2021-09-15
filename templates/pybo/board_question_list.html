@@ -9,54 +9,28 @@
 </script>
 
 
-<div class="container-fluid my-3 px-5">
+<div class="container my-3 px-5">
+    <div class="row pb-2 justify-content-center">
+        <div class="col-12">
+            <div class="alert alert-light text-center" style="font-size:24px;" role="alert">
+                {{ posttype }}
+            </div>
+        </div>
+    </div>
     <div class="row pb-2 justify-content-center"> 
-        <div class="col-2"></div>
-        <div class="col-9 text-end">
+        <div class="col-12 text-end">
             <input type="text" style="margin-right:2px;" id="search_text">
             <input type="button" id="search_btn" onclick="search(this);" value="검색">
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-2 justify-content-center" style="font-size:12px;">
-            <div class="card mb-2 pb-2">
-                <div class="card-header bg-white">조회수 TOP3</div>
-                <ul class="list-group list-group-flush">
-                    {% for post in greatest_hits_list %}
-                        <li class="list-group-item"><a href="{% url 'pybo:detail' post.id %}" style="color:black;">{{ post.subject }}
-                            {% if post.answer_set.count > 0 %}
-                            <span class="text-danger small ml-2">
-                                {{ post.answer_set.count }}
-                            </span>
-                            {% endif %}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="card">
-                <div class="card-header bg-white">최근 댓글달린 게시글</div>
-                <ul class="list-group list-group-flush">
-                    {% for post in recently_answered_list %}
-                        <li class="list-group-item"><a href="{% url 'pybo:detail' post.id %}" style="color: black;">
-                            {{ post.subject }}                         
-                            {% if post.answer_set.count > 0 %}
-                            <span class="text-danger small ml-2">
-                                {{ post.answer_set.count }}
-                            </span>
-                            {% endif %}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="col-9 col-sm-9">
+        <div class="col-12">
             <table class="table">
                 <thead>
                 <tr class="table-dark text-center">
                     <th style="width:8%">번호</th>
                     <th style="width:8%">추천</th>
-                    <th style="width:8%">게시판</th>
-                    <th style="width:40%">제목</th>
+                    <th style="width:50%">제목</th>
                     <th>글쓴이</th>
                     <th>작성일시</th>
                     <th style="width:9%">조회수</th>
@@ -69,24 +43,9 @@
                     <td>{{forloop.counter}}</td>
                     <td>
                         {% if question.voter.all.count > 0 %}
-                        <span class="badge bg-warning px-2 py-1">
+                        <span class="badge badge-warning px-2 py-1">
                             {{ question.voter.all.count }}
                         </span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if question.posttype == 0 %}
-                            <span class="badge bg-dark px-2 py-1">
-                                자유
-                            </span>
-                        {% elif question.posttype == 1 %}
-                            <span class="badge bg-primary px-2 py-1">
-                                파이썬
-                            </span>
-                        {% elif question.posttype == 2 %}
-                            <span class="badge bg-success px-2 py-1">
-                                자바
-                            </span>
                         {% endif %}
                     </td>
                     <td class="text-left">
@@ -116,8 +75,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-2"></div>
-        <div class="col-9 col-sm-9">
+        <div class="col-12">
             <ul class="pagination justify-content-center">
                 {% if question_list.has_previous %}
                 <li class="page-item">
@@ -160,8 +118,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-2"></div>
-        <div class="col-9 text-end">
+        <div class="col-12 text-end">
             <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">질문 등록하기</a>
         </div>
     </div>

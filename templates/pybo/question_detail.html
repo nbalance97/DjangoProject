@@ -30,12 +30,12 @@
     {% endif %}
     <h2 class="border-bottom py-2"> {{ question.subject }} </h2>
     <div class="row my-3">
-        <div class="col-1">
-            <div class="bg-light text-center p-3 border font-weight-bolder mb-1">
+        <div class="col-1 text-center">
+            <div class="bg-white text-center mx-3 p-3 border font-weight-bolder mb-1">
                 {{ question.voter.count }}
             </div>
             <a href="#" data-uri="{% url 'pybo:vote_question' question.id %}"
-               class="recommend btn btn-sm btn-secondary btn-block my-1">추천</a>
+               class="recommend btn btn-sm btn-secondary btn-block my-1 ms-2 me-2">추천</a>
         </div>
         <div class="col-11">
             <div class="card">

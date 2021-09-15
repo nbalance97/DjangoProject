@@ -14,9 +14,9 @@
                     게시판
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="?posttype=0">자유게시판</a></li>
-                    <li><a class="dropdown-item" href="?posttype=1">파이썬 게시판</a></li>
-                    <li><a class="dropdown-item" href="?posttype=2">자바 게시판</a></li>
+                    <li><a class="dropdown-item" href="{% url 'pybo:board_post' 0 %}">자유게시판</a></li>
+                    <li><a class="dropdown-item" href="{% url 'pybo:board_post' 1 %}">파이썬 게시판</a></li>
+                    <li><a class="dropdown-item" href="{% url 'pybo:board_post' 2 %}">자바 게시판</a></li>
                 </ul>
                 </li>
             </ul>

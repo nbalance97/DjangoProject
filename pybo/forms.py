@@ -5,8 +5,9 @@ from pybo.models import Question, Answer, Comment
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['subject', 'content', 'image']
+        fields = ['posttype', 'subject', 'content', 'image']
         labels = {
+            'posttype': '게시판',
             'subject': '제목',
             'content': '내용',
             'image': '이미지',

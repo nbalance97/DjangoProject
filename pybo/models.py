@@ -4,8 +4,13 @@ from django.contrib.auth.models import User
 
 
 class Question(models.Model):
+    CHOICES = (
+        (0, '자유'),
+        (1, '파이썬'),
+        (2, '자바'),
+    )
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_question')
-    posttype = models.IntegerField(default=0)
+    posttype = models.IntegerField(default=0, choices=CHOICES)
     subject = models.CharField(max_length = 200)
     modify_date = models.DateTimeField(null=True, blank=True)
     content = models.TextField()

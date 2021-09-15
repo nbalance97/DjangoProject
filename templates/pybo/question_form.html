@@ -22,6 +22,16 @@
                 {% endfor %}
             </div>
             {% endif %}
+            <div class="form-group">
+                <label for="posttype">게시판</label>
+                <select class="form-select" name="posttype" id="id_posttype">
+                    <!-- choice에서 (실제값, 유저에게 보여질 내용) 지정해 주었으므로, -->
+                    {% for v, k in form.fields.posttype.choices %}
+                        <option value="{{ v }}" {% if form.fields.posttype.value == v %} selected {% endif %}>{{ k }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
 
             <div class="form-group">
                 <label for="subject">제목</label>

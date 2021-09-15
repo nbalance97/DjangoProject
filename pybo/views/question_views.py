@@ -18,7 +18,7 @@ def question_create(request):
             if request.FILES.get('image') != None:
                 question.image = request.FILES['image']
             question.save()
-            return redirect('pybo:index')
+            return redirect('pybo:detail', question_id=question.id)
     else:
         form = QuestionForm() # get인 경우 호출
     context = {'form': form}
