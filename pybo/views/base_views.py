@@ -1,13 +1,19 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render,get_object_or_404
+from django.http import Http404
 from ..models import Question, Answer
 
+MAXIMUM_POSTTYPE = 4 # 최대 게시판 개수
+
+# 0 : 자유게시판
+# 1 : 파이썬 게시판
+# 2 : 자바 게시판
 
 def index(request):
     page = request.GET.get('page', '1')
     query = request.GET.get('query', '')
     question_list = Question.objects.filter(subject__contains=query).order_by('-create_date')
-    paginator = Paginator(question_list, 10)
+    paginator = Paginator(question_list, 3)
     page_obj = paginator.get_page(page)
 
     # 최다 조회수
@@ -27,14 +33,18 @@ def index(request):
                 break
 
     recently_answered_list = Question.objects.filter(id__in=recently_answered_list)
+    
     context = {
         'question_list': page_obj,
         'greatest_hits_list': greatest_hits_list, 
         'recently_answered_list': recently_answered_list,
+        'query': query,
     }
 
     return render(request, 'pybo/question_list.html', context)
 
+def board_posts(request, board_id):
+    pass
 
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)

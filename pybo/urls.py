@@ -6,6 +6,7 @@ app_name = 'pybo'
 urlpatterns = [
     path('', base_views.index, name='index'),
     path('<int:question_id>/', base_views.detail, name='detail'),
+    path('board/<int:board_id>/', base_views.board_posts, name='board_post'),
 
     # 질문 관련 처리
     path('question/create/', question_views.question_create, name='question_create'),

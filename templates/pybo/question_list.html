@@ -23,7 +23,13 @@
                 <div class="card-header bg-white">조회수 TOP3</div>
                 <ul class="list-group list-group-flush">
                     {% for post in greatest_hits_list %}
-                        <li class="list-group-item"><a href="{% url 'pybo:detail' post.id %}" style="color:black;">{{ post.subject }}</a></li>
+                        <li class="list-group-item"><a href="{% url 'pybo:detail' post.id %}" style="color:black;">{{ post.subject }}
+                            {% if post.answer_set.count > 0 %}
+                            <span class="text-danger small ml-2">
+                                {{ post.answer_set.count }}
+                            </span>
+                            {% endif %}</a>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -31,7 +37,14 @@
                 <div class="card-header bg-white">최근 댓글달린 게시글</div>
                 <ul class="list-group list-group-flush">
                     {% for post in recently_answered_list %}
-                        <li class="list-group-item"><a href="{% url 'pybo:detail' post.id %}" style="color: black;">{{ post.subject }}</a></li>
+                        <li class="list-group-item"><a href="{% url 'pybo:detail' post.id %}" style="color: black;">
+                            {{ post.subject }}                         
+                            {% if post.answer_set.count > 0 %}
+                            <span class="text-danger small ml-2">
+                                {{ post.answer_set.count }}
+                            </span>
+                            {% endif %}</a>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -92,7 +105,7 @@
             <ul class="pagination justify-content-center">
                 {% if question_list.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{question_list.previous_page_number}}">이전</a>
+                    <a class="page-link" href="?page={{question_list.previous_page_number}}&query={{query}}">이전</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled">
@@ -104,13 +117,13 @@
                 {% if page_number >= question_list.number|add:-3 and page_number <= question_list.number|add:3 %}
                     {% if page_number == question_list.number %} <!-- 현재 페이지인 경우 다르게 표시 -->
                     <li class="page-item active" aria-current="page">
-                        <a class="page-link" href="?page={{ page_number }}">
+                        <a class="page-link" href="?page={{ page_number }}&query={{query}}">
                             {{ page_number }}
                         </a>
                     </li>
                     {% else %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{page_number}}">
+                        <a class="page-link" href="?page={{page_number}}&query={{query}}">
                             {{ page_number }}
                         </a>
                     </li>
@@ -120,7 +133,7 @@
 
                 {% if question_list.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ question_list.next_page_number }}">다음</a>
+                    <a class="page-link" href="?page={{ question_list.next_page_number }}&query={{query}}">다음</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled">
