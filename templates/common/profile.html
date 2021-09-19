@@ -20,7 +20,7 @@
                         <table class="table">
                             <tr class="table-dark">
                                 <th>번호</th>
-                                <th style="width:50%">제목</th>
+                                <th class="text-center" style="width:50%">제목</th>
                                 <th>글쓴이</th>
                                 <th>작성일시</th>
                             </tr>
@@ -32,7 +32,7 @@
                                             {{question.subject}}
                                         </a>
                                     </td>
-                                    <td><a href="{% url 'common:profile_view' question.author.id %}">{{question.author.username}}</a></td>
+                                    <td>{{question.author.username}}</td>
                                     <td>{{question.create_date}}</td>
                                 </tr>
                             {% endfor %}
@@ -82,7 +82,7 @@
                         <table class="table">
                             <tr class="table-dark">
                                 <th>번호</th>
-                                <th style="width:50%">제목</th>
+                                <th class="text-center" style="width:50%">제목</th>
                                 <th>글쓴이</th>
                                 <th>작성일시</th>
                             </tr>
@@ -94,7 +94,7 @@
                                             {{answer.subject}}
                                         </a>
                                     </td>
-                                    <td>{{answer.author.id}}</td>
+                                    <td>{{answer.author.username}}</td>
                                     <td>{{answer.create_date}}</td>
                                 </tr>
                             {% endfor %}
