@@ -7,8 +7,8 @@
             <div class="col-9">
                 <ul class="list-group list-group-horizontal pt-5 mx-auto w-50 justify-content-center">
                     <li class="list-group-item">{{ target_user.username }}</li>
-                    <li class="list-group-item">질문 : {{ target_user.author_answer.all.count }} 개</li>
-                    <li class="list-group-item">답변 : {{ target_user.author_question.all.count }} 개</li>
+                    <li class="list-group-item">질문 : {{ target_user.author_question.all.count }} 개</li>
+                    <li class="list-group-item">답변 : {{ target_user.author_answer.all.count }} 개</li>
                     <li class="list-group-item">채택 : {{ total_accepted }} 개</li>
                 </ul>
             </div>

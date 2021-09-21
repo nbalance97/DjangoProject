@@ -19,9 +19,8 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-2 justify-content-center" style="font-size:12px;">
-            <div class="card mb-2 pb-2">
-                <div class="card-header bg-white">조회수 TOP3</div>
-                <ul class="list-group list-group-flush">
+                <div class="text-center mb-2">최다 조회수 게시글</div>
+                <ul class="list-group list-group-flush mb-3">
                     {% for post in greatest_hits_list %}
                         <li class="list-group-item"><a href="{% url 'pybo:detail' post.id %}" style="color:black;">{{ post.subject }}
                             {% if post.answer_set.count > 0 %}
@@ -32,9 +31,7 @@
                         </li>
                     {% endfor %}
                 </ul>
-            </div>
-            <div class="card">
-                <div class="card-header bg-white">최근 댓글달린 게시글</div>
+                <div class="text-center mb-2">최근 댓글달린 게시글</div>
                 <ul class="list-group list-group-flush">
                     {% for post in recently_answered_list %}
                         <li class="list-group-item"><a href="{% url 'pybo:detail' post.id %}" style="color: black;">
@@ -47,7 +44,6 @@
                         </li>
                     {% endfor %}
                 </ul>
-            </div>
         </div>
         <div class="col-9 col-sm-9">
             <table class="table">
