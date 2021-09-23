@@ -5,6 +5,7 @@ from django.utils import timezone
 
 from ..forms import CommentForm
 from ..models import Question, Answer, Comment
+from .notification_views import make_notifications
 
 
 @login_required(login_url='common:login')
@@ -17,6 +18,7 @@ def comment_create_question(request, question_id):
             comment.author = request.user
             comment.create_date = timezone.now()
             comment.question = question
+            make_notifications(comment.question.author, "새로운 댓글이 달렸어요.", question)
             comment.save()
             return redirect('pybo:detail', question_id=question.id)
     else:
@@ -67,6 +69,7 @@ def comment_create_answer(request, answer_id):
             comment.author = request.user
             comment.create_date = timezone.now()
             comment.answer = answer
+            make_notifications(answer.author, "새로운 댓글이 달렸어요.", answer.question)
             comment.save()
             return redirect('pybo:detail', question_id = comment.answer.question.id)
     else:

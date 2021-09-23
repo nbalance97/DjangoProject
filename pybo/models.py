@@ -46,5 +46,15 @@ class Comment(models.Model):
     answer = models.ForeignKey(Answer, null=True, blank=True, on_delete=models.CASCADE)
 
 
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_notification')
+    content = models.TextField()
+    arrive_date = models.DateTimeField(auto_now_add=True)
+    isread = models.BooleanField(default=False)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+
+
+
+
 
 

@@ -1,7 +1,16 @@
+from pybo.views import notification_views
 from django.urls import path
-from .views import base_views, question_views, answer_views, comment_views, vote_views
+from .views import base_views, question_views, answer_views, comment_views, vote_views, notification_views
 
 app_name = 'pybo'
+
+notification_api = notification_views.NotificationViewSet.as_view({
+    'get': 'get_notification_information',
+})
+
+notification_api_pk = notification_views.NotificationViewSet.as_view({
+    'get': 'change_notification_status',
+})
 
 urlpatterns = [
     path('', base_views.index, name='index'),
@@ -33,4 +42,7 @@ urlpatterns = [
     path('vote/question/<int:question_id>/', vote_views.vote_question, name='vote_question'),
     path('vote/answer/<int:answer_id>/', vote_views.vote_answer, name='vote_answer'),
 
+    # API 처리
+    path('API/notification/', notification_api, name="get_notification_list"),
+    path('API/notification/<int:pk>/',notification_api_pk, name="set_notification_data")
 ]
