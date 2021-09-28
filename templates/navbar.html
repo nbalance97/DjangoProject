@@ -30,11 +30,6 @@
                             <img src="{% static 'Alarm.png' %}" style="height:30px">
                         </a>     
                         <ul class="dropdown-menu" id="notification_menu" aria-labelledby="notification" >
-
-
-                            <!-- <li><a class="dropdown-item" href="{% url 'pybo:board_post' 0 %}">기타</a></li>
-                            <li><a class="dropdown-item" href="{% url 'pybo:board_post' 1 %}">ㄱㄱ</a></li>
-                            <li><a class="dropdown-item" href="{% url 'pybo:board_post' 2 %}">ㄹㅇㅋㅋ</a></li> -->
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -97,10 +92,10 @@
             console.log(error);
         });
 
-        console.log($('#notification_menu').children())
         $('#notification_menu').on('click', 'li', (e) => {
             let value = e.target.dataset.value;
-            fetch("API/notification/" + value)
+            let url_mask = "{% url 'pybo:set_notification_data' 999999999 %}".replace('999999999', value);
+            fetch(url_mask)
             .then((response) => {
                 console.log(response);
             })
@@ -108,8 +103,6 @@
                 console.log(error);
             })
         })
-
-
     {% endif %}
 
 </script>
