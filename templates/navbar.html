@@ -11,7 +11,7 @@
                 <a class="nav-link active" aria-current="page" href="{% url 'pybo:index' %}">홈으로</a>
                 </li>
                 <li class="nav-item dropdown ms-3">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         게시판
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -26,7 +26,7 @@
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                     <li id="notification_part" class="nav-item position-relative dropdown" style="vertical-align: middle; color: black;">
-                        <a class="nav-link pt-0 pb-0" href="#" id="notification" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right:20px; vertical-align: middle; color: black;">
+                        <a class="nav-link pt-0 pb-0" href="#" id="notification" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right:20px; vertical-align: middle; color: black;">
                             <img src="{% static 'Alarm.png' %}" style="height:30px">
                         </a>     
                         <ul class="dropdown-menu" id="notification_menu" aria-labelledby="notification" >
@@ -78,7 +78,7 @@
             $('#notification_part span').remove();
             // 알림 개수 표시 부분
             if (data.length > 0) {
-                $('#notification_part').append('<span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger">'+data.length+'</span>');
+                $('#notification_part').append('<span class="position-absolute top-2 badge rounded-pill bg-danger" style="top:20px; left:25px;">'+data.length+'</span>');
             }
             
             // 알림 추가 부분

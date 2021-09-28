@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 
+{% block bootstrap_css %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block bootstrap_js %}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+{% endblock %}
+
 {% block script %}
 <script type="text/javascript">
     $(document).ready(function() {
@@ -31,7 +41,7 @@
     <h2 class="border-bottom py-2"> {{ question.subject }} </h2>
     <div class="row my-3">
         <div class="col-1 text-center">
-            <div class="bg-white text-center mx-3 p-3 border font-weight-bolder mb-1">
+            <div class="bg-white text-center mx-1 p-3 border font-weight-bolder mb-1">
                 {{ question.voter.count }}
             </div>
             <a href="#" data-uri="{% url 'pybo:vote_question' question.id %}"
@@ -234,7 +244,15 @@
                       {% if not user.is_authenticated %} disabled {% endif %}
                       class="form-control" rows="10"></textarea>
         </div>
-        <input type="submit" value="답변 등록" class="btn btn-primary">
+        <input type="submit" value="답변 등록" class="mt-2 btn btn-primary">
     </form>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#content").summernote({
+            height: '300px',
+        });
+    })
+</script>
 {% endblock %}

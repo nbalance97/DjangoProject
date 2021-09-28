@@ -68,7 +68,7 @@ def detail(request, question_id):
     question.save()
 
     # Answer Pagination
-    paginator = Paginator(Answer.objects.filter(question=question), 3)
+    paginator = Paginator(Answer.objects.filter(question=question).order_by('-voter'), 3)
     page_obj = paginator.get_page(answer_page_id)
 
     context = {'question': question, 'answer_list': page_obj}
