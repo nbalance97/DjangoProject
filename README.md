@@ -110,7 +110,7 @@ Python Django Pybo 게시판 프로젝트
 
         @action(detail=False, methods=['get'])
         def get_notification_information(self, request):
-            if request.is_authenticated():
+            if request.user.is_authenticated:
                 notification = Notification.objects.filter(user=request.user, isread=False)[:self.MAX_NOTIFICATION_COUNT]
                 serializer = self.get_serializer(notification, many=True)
                 return Response(serializer.data)
@@ -119,7 +119,7 @@ Python Django Pybo 게시판 프로젝트
 
         @action(detail=True, methods=['get'])
         def change_notification_status(self, request, pk=None):
-            if request.is_authenticated():
+            if request.user.is_authenticated:
                 notification = self.get_object()
                 #serializer = NotificationSerializer(request.data)
                 #if serializer.is_valid():
