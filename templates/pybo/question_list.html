@@ -1,20 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load poll_extras %}
 
 <script>
     function search(p) {
         let query = document.getElementById("search_text").value;
-        window.location.href = "?query=" + query;
+        let type = $('#search_type option:selected').val();
+        window.location.href = "?page={{ 1 }}&query="+query+"&type="+type;
     }
 </script>
 
+<!-- 검색형식 url 고안 -->
+<!-- ?page=페이지&query=질의&type=검색형식 -->
 
 <div class="container-fluid my-3 px-5">
     <div class="row pb-2 justify-content-center"> 
         <div class="col-2"></div>
-        <div class="col-9 text-end">
-            <input type="text" style="margin-right:2px;" id="search_text">
-            <input type="button" id="search_btn" onclick="search(this);" value="검색">
+        <div class="form-inline col-9 justify-content-end">
+            <select id="search_type" class="form-control mr-2">
+                <option value="title" selected>제목</option>
+                <option value="title_content">제목+내용</option>
+                <option value="author">글쓴이</option>
+            </select>
+            <input type="text" class="form-control mr-2" id="search_text">
+            <input type="button" class="btn btn-dark" id="search_btn" onclick="search(this);" value="검색">
         </div>
     </div>
     <div class="row justify-content-center">
@@ -31,7 +40,7 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <div class="text-center mb-2">최근 댓글달린 게시글</div>
+                <div class="text-center mb-2">최근 답변이 달린 게시글</div>
                 <ul class="list-group list-group-flush">
                     {% for post in recently_answered_list %}
                         <li class="list-group-item"><a href="{% url 'pybo:detail' post.id %}" style="color: black;">
@@ -117,7 +126,7 @@
             <ul class="pagination justify-content-center">
                 {% if question_list.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{question_list.previous_page_number}}&query={{query}}">이전</a>
+                    <a class="page-link" href="{{ '?'|add_page:question_list.previous_page_number|add_query:query|add_type:type  }}">이전</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled">
@@ -129,13 +138,13 @@
                 {% if page_number >= question_list.number|add:-3 and page_number <= question_list.number|add:3 %}
                     {% if page_number == question_list.number %} <!-- 현재 페이지인 경우 다르게 표시 -->
                     <li class="page-item active" aria-current="page">
-                        <a class="page-link" href="?page={{ page_number }}&query={{query}}">
+                        <a class="page-link" href="{{ '?'|add_page:page_number|add_query:query|add_type:type  }}">
                             {{ page_number }}
                         </a>
                     </li>
                     {% else %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{page_number}}&query={{query}}">
+                        <a class="page-link" href="{{ '?'|add_page:page_number|add_query:query|add_type:type  }}">
                             {{ page_number }}
                         </a>
                     </li>
@@ -145,7 +154,7 @@
 
                 {% if question_list.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ question_list.next_page_number }}&query={{query}}">다음</a>
+                    <a class="page-link" href="{{ '?'|add_page:question_list.next_page_number|add_query:query|add_type:type  }}">다음</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled">
