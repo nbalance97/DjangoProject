@@ -33,12 +33,21 @@ def get_question_list_result(query, type):
     elif type == 'author':
         return Question.objects.filter(author__username__icontains=query).order_by('-create_date')
 
+def get_question_board_list_result(board_id, query, type):
+    if type == 'title':
+        return Question.objects.filter(posttype=board_id).filter(subject__icontains=query).order_by('-create_date')
+    elif type == 'title_content':
+        return Question.objects.filter(posttype=board_id).filter(Q(subject__icontains=query) or Q(content__icontains=query)).order_by('-create_date')
+    elif type == 'author':
+        return Question.objects.filter(posttype=board_id).filter(author__username__icontains=query).order_by('-create_date')
+
 
 def index(request):
     page = request.GET.get('page', '1')
     query, type = request.GET.get('query', None), request.GET.get('type', None)
     question_list = []
 
+    # query가 없으면 전체 데이터, 있으면 검색 결과만 표시
     if query is None:
         question_list = Question.objects.all().order_by('-create_date')
     else:
@@ -64,11 +73,17 @@ def index(request):
 
 def board_posts(request, board_id):
     # 해당 게시판의 게시글 정보만 가져와서 진행
-    board_questions = Question.objects.filter(posttype=board_id).order_by('-create_date')
-
+    query, type = request.GET.get('query', None), request.GET.get('type', None)
+    board_questions = []
+    if query is None:
+        board_questions = Question.objects.filter(posttype=board_id).order_by('-create_date')
+    else:
+        board_questions = get_question_board_list_result(board_id, query, type)
+    
+    
     if board_id > MAXIMUM_POSTTYPE:
         raise Http404('올바르지 않은 게시판입니다.')
-
+    print(board_questions)
     page = request.GET.get('page', 1)
     paginator = Paginator(board_questions, 10)
     page_obj = paginator.get_page(page)
@@ -76,6 +91,8 @@ def board_posts(request, board_id):
     context = {
         'question_list': page_obj,
         'posttype': POSTTYPE[board_id],
+        'query': query,
+        'type': type
     }
 
     return render(request, 'pybo/board_question_list.html', context)

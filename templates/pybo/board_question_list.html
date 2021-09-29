@@ -1,26 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
 
+{% load poll_extras %}
+
 <script>
     function search(p) {
         let query = document.getElementById("search_text").value;
-        window.location.href = "?query=" + query;
+        let type = $('#search_type option:selected').val();
+        window.location.href = "?page={{ 1 }}&query="+query+"&type="+type;
     }
 </script>
 
+<style>
+    @media only screen and (min-width: 1200px) {
+        .container { max-width: 80%; }
+    }
+</style>
 
-<div class="container my-3 px-5">
+<div class="container" style="width:1500px;">
     <div class="row pb-2 justify-content-center">
         <div class="col-12">
-            <div class="alert alert-light text-center" style="font-size:24px;" role="alert">
+            <div class="alert alert-light text-dark text-center font-weight-bolder" style="font-size:32px;" role="alert">
                 {{ posttype }}
             </div>
         </div>
     </div>
     <div class="row pb-2 justify-content-center"> 
-        <div class="col-12 text-right">
-            <input type="text" style="margin-right:2px;" id="search_text">
-            <input type="button" id="search_btn" onclick="search(this);" value="검색">
+        <div class="col-12 form-inline justify-content-end">
+            <select id="search_type" class="form-control mr-2">
+                <option value="title" selected>제목</option>
+                <option value="title_content">제목+내용</option>
+                <option value="author">글쓴이</option>
+            </select>
+            <input type="text" class="form-control mr-2" id="search_text">
+            <input type="button" class="btn btn-dark" id="search_btn" onclick="search(this);" value="검색">
         </div>
     </div>
     <div class="row justify-content-center">
@@ -91,13 +104,13 @@
                 {% if page_number >= question_list.number|add:-3 and page_number <= question_list.number|add:3 %}
                     {% if page_number == question_list.number %} <!-- 현재 페이지인 경우 다르게 표시 -->
                     <li class="page-item active" aria-current="page">
-                        <a class="page-link" href="?page={{ page_number }}">
+                        <a class="page-link" href="?page={{ '?'|add_page:page_number|add_query:query|add_type:type }}">
                             {{ page_number }}
                         </a>
                     </li>
                     {% else %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{page_number}}">
+                        <a class="page-link" href="{{ '?'|add_page:page_number|add_query:query|add_type:type }}">
                             {{ page_number }}
                         </a>
                     </li>
@@ -107,7 +120,7 @@
 
                 {% if question_list.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ question_list.next_page_number }}">다음</a>
+                    <a class="page-link" href="?page={{ '?'|add_page:question_list.next_page_number|add_query:query|add_type:type }}">다음</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled">
