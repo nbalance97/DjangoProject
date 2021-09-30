@@ -12,6 +12,40 @@ Python Django Pybo 게시판 프로젝트
 1. 개인정보 / 비밀번호 수정 기능 추가
 
 2. 게시글 검색 기능 추가
+    - 검색에 분류부분 추가
+    - 분류 시 사용할 템플릿 태그 추가(get parameter 전달하기 위한 태그)
+    ``` python
+        from django import template
+        register = template.Library()
+
+        @register.filter
+        def add_page(value, arg):
+            if arg == None:
+                return value
+            return value + 'page=' + str(arg) + '&'
+
+        @register.filter
+        def add_query(value, arg):
+            if arg == None:
+                return value
+            return value + 'query=' + arg + '&'
+
+        @register.filter
+        def add_type(value, arg):
+            if arg == None:
+                return value
+            return value + 'type=' + arg + '&'
+    ```
+    - 검색시 받아온 type과 query에 따라 다르게 검색(제목, 제목+내용, 글쓴이)
+    ``` python
+        def get_question_list_result(query, type):
+            if type == 'title':
+                return Question.objects.filter(subject__icontains=query).order_by('-create_date')
+            elif type == 'title_content':
+                return Question.objects.filter(Q(subject__icontains=query) or Q(content__icontains=query)).order_by('-create_date')
+            elif type == 'author':
+                return Question.objects.filter(author__username__icontains=query).order_by('-create_date')
+    ```
 
 3. 게시글 내 채택 기능 추가
     - 채택 기능 구현을 위한 게시글 필드 추가(accepted)
