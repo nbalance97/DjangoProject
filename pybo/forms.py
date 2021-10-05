@@ -13,8 +13,6 @@ class QuestionForm(forms.ModelForm):
             'image': '이미지',
         }
         
-
-
 class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer

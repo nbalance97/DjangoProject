@@ -32,7 +32,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
     def change_notification_status(self, request, pk=None):
         if request.user.is_authenticated:
             notification = self.get_object()
-            if notification != None:
+            if notification != None and notification.user == request.user:
                 notification.isread = True
                 notification.save()
                 return Response({'status':'save successfully'})

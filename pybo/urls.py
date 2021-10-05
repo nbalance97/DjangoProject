@@ -18,7 +18,7 @@ urlpatterns = [
     path('board/<int:board_id>/', base_views.board_posts, name='board_post'),
 
     # 질문 관련 처리
-    path('question/create/', question_views.question_create, name='question_create'),
+    path('question/create/', question_views.QuestionCreateView.as_view(), name='question_create'),
     path('question/modify/<int:question_id>/', question_views.question_modify, name='question_modify'),
     path('question/delete/<int:question_id>/', question_views.question_delete, name='question_delete'),
 
