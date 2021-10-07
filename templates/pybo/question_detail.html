@@ -163,7 +163,7 @@
                             </span>
                             {% if request.user == comment.author %}
                             <a href="{% url 'pybo:comment_modify_answer' comment.id %}" class="small">수정</a>
-                            <a href="#" class="small delete" data-uri="{% url 'pybo:comment_delete_answer' comment.id %}">삭제</a>
+                            <a href="{% url 'pybo:comment_delete_answer' comment.id %}" class="small delete">삭제</a>
                             {% endif %}
                         </div>
                         {% endfor %}

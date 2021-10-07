@@ -29,14 +29,14 @@ urlpatterns = [
     path('answer/accept/<int:answer_id>/', answer_views.AnswerAcceptView.as_view(), name='answer_accept'),
 
     # 질문 댓글 관련 처리
-    path('comment/create/question/<int:question_id>/', comment_views.comment_create_question, name='comment_create_question'),
-    path('comment/modify/question/<int:comment_id>/', comment_views.comment_modify_question, name='comment_modify_question'),
-    path('comment/delete/question/<int:comment_id>/', comment_views.comment_delete_question, name='comment_delete_question'),
+    path('comment/create/question/<int:question_id>/', comment_views.QuestionCommentCreateView.as_view(), name='comment_create_question'),
+    path('comment/modify/question/<int:comment_id>/', comment_views.CommentUpdateView.as_view(), name='comment_modify_question'),
+    path('comment/delete/question/<int:comment_id>/', comment_views.CommentDeleteView.as_view(), name='comment_delete_question'),
     
     # 답변 댓글 관련 처리
-    path('comment/create/answer/<int:answer_id>/', comment_views.comment_create_answer, name='comment_create_answer'),
-    path('comment/modify/answer/<int:comment_id>/', comment_views.comment_modify_answer, name='comment_modify_answer'),
-    path('comment/delete/answer/<int:comment_id>/', comment_views.comment_delete_answer, name='comment_delete_answer'),
+    path('comment/create/answer/<int:answer_id>/', comment_views.AnswerCommentCreateView.as_view(), name='comment_create_answer'),
+    path('comment/modify/answer/<int:comment_id>/', comment_views.CommentUpdateView.as_view(), name='comment_modify_answer'),
+    path('comment/delete/answer/<int:comment_id>/', comment_views.CommentDeleteView.as_view(), name='comment_delete_answer'),
 
     # 추천 관련 처리
     path('vote/question/<int:question_id>/', vote_views.vote_question, name='vote_question'),

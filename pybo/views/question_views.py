@@ -17,7 +17,7 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
     model = Question
     form_class = QuestionForm
     template_name = 'pybo/question_form.html'
-    login_url = '/login/'
+    login_url = 'common:login'
 
     def get_success_url(self):
         return reverse('pybo:detail', kwargs={'question_id': self.object.id})
@@ -39,6 +39,7 @@ class QuestionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     form_class = QuestionForm
     pk_url_kwarg = "question_id"
     template_name = 'pybo/question_form.html'
+    login_url = 'common:login'
 
     def get_success_url(self):
         return reverse('pybo:detail', kwargs={'question_id': self.object.id})
@@ -61,6 +62,7 @@ class QuestionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 class QuestionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Question
     pk_url_kwarg = "question_id"
+    login_url = 'common:login'
 
     def get_success_url(self):
         return reverse('pybo:index')

@@ -17,7 +17,7 @@ from .notification_views import make_notifications
 class AnswerCreateView(LoginRequiredMixin, CreateView):
     model = Answer
     template_name = 'pybo/answer_form.html'
-    login_url = 'pybo:index'
+    login_url = 'common:login'
     form_class = AnswerForm
 
     def get_success_url(self):
@@ -37,7 +37,7 @@ class AnswerCreateView(LoginRequiredMixin, CreateView):
 class AnswerUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Answer
     template_name = 'pybo/answer_form.html'
-    login_url = 'pybo:index'
+    login_url = 'common:login'
     pk_url_kwarg = 'answer_id'
     form_class = AnswerForm
 
@@ -58,7 +58,7 @@ class AnswerUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class AnswerDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Answer
-    login_url = 'pybo:index'
+    login_url = 'common:login'
     pk_url_kwarg = 'answer_id'
 
     def test_func(self):
@@ -72,7 +72,7 @@ class AnswerDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 class AnswerAcceptView(LoginRequiredMixin, UserPassesTestMixin, View):
-    login_url = 'pybo:index'
+    login_url = 'common:login'
 
     def test_func(self):
         target = get_object_or_404(Answer, pk=self.kwargs['answer_id'])

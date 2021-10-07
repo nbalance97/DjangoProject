@@ -1,110 +1,101 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils import timezone
+
+from django.urls import reverse
+
+from django.views.generic import CreateView, UpdateView, DeleteView
 
 from ..forms import CommentForm
 from ..models import Question, Answer, Comment
 from .notification_views import make_notifications
 
 
-@login_required(login_url='common:login')
-def comment_create_question(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.create_date = timezone.now()
-            comment.question = question
-            make_notifications(comment.question.author, "새로운 댓글이 달렸어요.", question)
-            comment.save()
-            return redirect('pybo:detail', question_id=question.id)
-    else:
-        form = CommentForm()
-    context = {'form': form}
-    return render(request, 'pybo/comment_form.html', context)
+class QuestionCommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    template_name = 'pybo/comment_form.html'
+    form_class = CommentForm
+    login_url = 'common:login'
 
+    def get_success_url(self):
+        return reverse('pybo:detail', kwargs={'question_id': self.object.question.id})
 
-@login_required(login_url='common:login')
-def comment_modify_question(request, comment_id):
-    comment = get_object_or_404(Comment, pk=comment_id)
-    if request.user != comment.author:
-        messages.error(request, '수정권한이 없습니다.')
-        return redirect('pybo:detail', question_id=comment.question.id)
+    def form_valid(self, form):
+        question = get_object_or_404(Question, pk=self.kwargs.get('question_id'))
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.create_date = timezone.now()
+        self.object.question = question
+        make_notifications(self.object.question.author, "새로운 댓글이 달렸어요.", question)
+        self.object.save()
+        return super().form_valid(form)
 
-    if request.method == "POST":
-        form = CommentForm(request.POST, instance=comment)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.modify_date = timezone.now()
-            comment.save()
-            return redirect('pybo:detail', question_id=comment.question.id)
-    else:
-        form = CommentForm(instance=comment)
-    context = {'form': form}
-    return render(request, 'pybo/comment_form.html', context)
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    template_name = 'pybo/comment_form.html'
+    form_class = CommentForm
+    pk_url_kwarg = 'comment_id'
+    login_url = 'common:login'
 
+    def test_func(self):
+        return self.request.user == self.get_object().author
 
-@login_required(login_url='common:login')
-def comment_delete_question(request, comment_id):
-    comment = get_object_or_404(Comment, pk=comment_id)
-    if request.user != comment.author:
-        messages.error(request, '댓글 삭제 권한이 없습니다')
-        return redirect('pybo:detail', question_id=comment.question_id)
-    else:
-        comment.delete()
-    return redirect('pybo:detail', question_id=comment.question_id)
-
-
-@login_required(login_url='common:login')
-def comment_create_answer(request, answer_id):
-    answer = get_object_or_404(Answer, pk=answer_id)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.create_date = timezone.now()
-            comment.answer = answer
-            make_notifications(answer.author, "새로운 댓글이 달렸어요.", answer.question)
-            comment.save()
-            return redirect('pybo:detail', question_id = comment.answer.question.id)
-    else:
-        form = CommentForm()
-    context = {'form': form}
-    return render(request, 'pybo/comment_form.html', context)
-
-
-@login_required(login_url='common:login')
-def comment_modify_answer(request, comment_id):
-    comment = get_object_or_404(Comment, pk=comment_id)
-    if request.user != comment.author:
-        messages.error(request, '댓글수정권한이 없습니다.')
-        return redirect('pybo:detail', question_id=comment.answer.question.id)
-
-    if request.method == "POST":
-        form = CommentForm(request.POST, instance=comment)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.modify_date = timezone.now()
-            comment.save()
-            return redirect('pybo:detail', question_id=comment.answer.question.id)
+    def get_success_url(self):
+        id = 0
+        if self.object.question:
+            # question에 달려있는 댓글
+            id = self.object.question.id
         else:
-            form = CommentForm(instance=comment)
+            # answer에 달려있는 댓글
+            id = self.object.answer.question.id
+        return reverse('pybo:detail', kwargs={'question_id': id})
+    
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.modify_date = timezone.now()
+        self.object.save()
+        return super().form_valid(form)
 
-    context = {'form': form}
-    return render(request, 'pybo/comment_form.html', context)
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    pk_url_kwarg = 'comment_id'
+    login_url = 'common:login'
+
+    def test_func(self):
+        return self.request.user == self.get_object().author
+    
+    def get(self, request, *args, **kwargs):
+        target_comment = self.get_object()
+        id = 0
+        if target_comment.question:
+            # question에 달려있는 댓글
+            id = target_comment.question.id
+        else:
+            # answer에 달려있는 댓글
+            id = target_comment.answer.question.id
+        target_comment.delete()
+        return HttpResponseRedirect(reverse('pybo:detail', kwargs={'question_id': id}))
 
 
-@login_required(login_url='common:login')
-def comment_delete_answer(request, comment_id):
-    comment = get_object_or_404(Comment, pk=comment_id)
-    if request.user != comment.author:
-        messages.error(request, '댓글수정권한이 없습니다.')
-        return redirect('pybo:detail', question_id=comment.answer.question.id)
-    comment.delete()
-    return redirect('pybo:detail', question_id=comment.answer.question.id)
+class AnswerCommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    login_url = 'common:login'
+    form_class = CommentForm
+
+    def get_success_url(self):
+        return reverse('pybo:detail', kwargs={'question_id': self.object.answer.question.id})
+
+    def form_valid(self, form):
+        if form.is_valid():
+            answer = get_object_or_404(Answer, pk=self.kwargs['answer_id'])
+            form.instance.author = self.request.user
+            form.instance.create_date = timezone.now()
+            form.instance.answer = answer
+            make_notifications(answer.author, "새로운 댓글이 달렸어요.", answer.question)
+        return super().form_valid(form)
+
