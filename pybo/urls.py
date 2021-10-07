@@ -19,14 +19,14 @@ urlpatterns = [
 
     # 질문 관련 처리
     path('question/create/', question_views.QuestionCreateView.as_view(), name='question_create'),
-    path('question/modify/<int:question_id>/', question_views.question_modify, name='question_modify'),
-    path('question/delete/<int:question_id>/', question_views.question_delete, name='question_delete'),
+    path('question/modify/<int:question_id>/', question_views.QuestionUpdateView.as_view(), name='question_modify'),
+    path('question/delete/<int:question_id>/', question_views.QuestionDeleteView.as_view(), name='question_delete'),
 
     # 답변 관련 처리
-    path('answer/create/<int:question_id>/', answer_views.answer_create, name='answer_create'),
-    path('answer/modify/<int:answer_id>/', answer_views.answer_modify, name='answer_modify'),
-    path('answer/delete/<int:answer_id>/', answer_views.answer_delete, name='answer_delete'),
-    path('answer/accept/<int:answer_id>/', answer_views.answer_accept, name='answer_accept'),
+    path('answer/create/<int:question_id>/', answer_views.AnswerCreateView.as_view(), name='answer_create'),
+    path('answer/modify/<int:answer_id>/', answer_views.AnswerUpdateView.as_view(), name='answer_modify'),
+    path('answer/delete/<int:answer_id>/', answer_views.AnswerDeleteView.as_view(), name='answer_delete'),
+    path('answer/accept/<int:answer_id>/', answer_views.AnswerAcceptView.as_view(), name='answer_accept'),
 
     # 질문 댓글 관련 처리
     path('comment/create/question/<int:question_id>/', comment_views.comment_create_question, name='comment_create_question'),
