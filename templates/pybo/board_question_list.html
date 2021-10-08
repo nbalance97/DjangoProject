@@ -90,9 +90,9 @@
     <div class="row justify-content-center">
         <div class="col-12">
             <ul class="pagination justify-content-center">
-                {% if question_list.has_previous %}
+                {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{question_list.previous_page_number}}">이전</a>
+                    <a class="page-link" href="?page={{page_obj.previous_page_number}}">이전</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled">
@@ -100,9 +100,9 @@
                 </li>
                 {% endif %}
 
-                {% for page_number in question_list.paginator.page_range %}
-                {% if page_number >= question_list.number|add:-3 and page_number <= question_list.number|add:3 %}
-                    {% if page_number == question_list.number %} <!-- 현재 페이지인 경우 다르게 표시 -->
+                {% for page_number in page_obj.paginator.page_range %}
+                {% if page_number >= page_obj.number|add:-3 and page_number <= page_obj.number|add:3 %}
+                    {% if page_number == page_obj.number %} <!-- 현재 페이지인 경우 다르게 표시 -->
                     <li class="page-item active" aria-current="page">
                         <a class="page-link" href="?page={{ '?'|add_page:page_number|add_query:query|add_type:type }}">
                             {{ page_number }}
@@ -118,9 +118,9 @@
                 {% endif %}
                 {% endfor %}
 
-                {% if question_list.has_next %}
+                {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ '?'|add_page:question_list.next_page_number|add_query:query|add_type:type }}">다음</a>
+                    <a class="page-link" href="?page={{ '?'|add_page:page_obj.next_page_number|add_query:query|add_type:type }}">다음</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled">

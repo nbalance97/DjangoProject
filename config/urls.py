@@ -23,7 +23,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('', base_views.index, name='index'),
+    path('', base_views.QuestionListView.as_view(), name='index'),
     path('admin/', admin.site.urls),
     path('pybo/', include('pybo.urls')),
     path('common/', include('common.urls')),

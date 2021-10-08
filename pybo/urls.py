@@ -13,9 +13,9 @@ notification_api_pk = notification_views.NotificationViewSet.as_view({
 })
 
 urlpatterns = [
-    path('', base_views.index, name='index'),
-    path('<int:question_id>/', base_views.detail, name='detail'),
-    path('board/<int:board_id>/', base_views.board_posts, name='board_post'),
+    path('', base_views.QuestionListView.as_view(), name='index'),
+    path('<int:question_id>/', base_views.QuestionDetailView.as_view(), name='detail'),
+    path('board/<int:board_id>/', base_views.BoardQuestionListView.as_view(), name='board_post'),
 
     # 질문 관련 처리
     path('question/create/', question_views.QuestionCreateView.as_view(), name='question_create'),
