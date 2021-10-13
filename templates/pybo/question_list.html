@@ -120,6 +120,14 @@
             </table>         
         </div>
     </div>
+
+    <div class="row justify-content-center">
+        <div class="col-2"></div>
+        <div class="col-9 col-sm-9 justify-content-end">
+            <a href="{% url 'pybo:question_create' %}" class="btn btn btn-dark float-right">질문 등록하기</a>
+        </div>
+    </div>
+
     <div class="row justify-content-center">
         <div class="col-2"></div>
         <div class="col-9 col-sm-9">
@@ -162,12 +170,6 @@
                 </li>
                 {% endif %}
             </ul>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-2"></div>
-        <div class="col-9 text-end">
-            <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">질문 등록하기</a>
         </div>
     </div>
 </div>
