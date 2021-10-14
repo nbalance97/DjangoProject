@@ -167,6 +167,11 @@ Python Django Pybo 게시판 프로젝트
                 return PermissionDenied()
     ```
 
+10. 구글 OAuth2 연동(Django-allauth)
+    - 구글 아이디로 로그인 시 자동으로 계정 생성
+
+11. .gitignore => DjangoProject/upload_media/Question_media 생성 필요
+
 # 실행 화면
 
 - 회원 정보 수정이나 비밀번호 수정 화면은 포함하지 않음.
