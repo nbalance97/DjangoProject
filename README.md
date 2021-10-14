@@ -4,8 +4,8 @@ Python Django Pybo 게시판 프로젝트
 
 ## 소개
 
-- Do it! 점프 투 장고 교재의 Pybo 실습 프로젝트 기반
-- 실습한 프로젝트 기반으로 기능 확장
+- Do it! 점프 투 장고 교재의 Pybo 게시판 실습 프로젝트 기반
+- 실습한 프로젝트 기반으로 코드 변경 및 기능 확장
 
 ## 추가된 기능
 
@@ -171,6 +171,8 @@ Python Django Pybo 게시판 프로젝트
     - 구글 아이디로 로그인 시 자동으로 계정 생성
 
 11. .gitignore => DjangoProject/upload_media/Question_media 생성 필요
+12. 함수형 뷰에서 클래스형 뷰로 변경
+    - 코드가 훨씬 깔끔해지고 추후에 추가하기가 용이하다고 생각
 
 # 실행 화면
 
@@ -180,7 +182,7 @@ Python Django Pybo 게시판 프로젝트
 
 ## 메인 화면
 
-![image](https://user-images.githubusercontent.com/76891875/135045697-40e2e295-074a-4049-86dc-bdbe57c808f5.png)
+![image](https://user-images.githubusercontent.com/76891875/137239788-5f024844-5d61-4fce-b139-d9146e153675.png)
 
 ## 상세 페이지
 
