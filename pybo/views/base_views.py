@@ -3,6 +3,7 @@ from django.shortcuts import render,get_object_or_404
 from django.http import Http404
 
 from django.views.generic import ListView, DetailView
+from django.db.models import Count
 
 
 from django.db.models import Q
@@ -10,7 +11,7 @@ from django.db.models import Q
 from ..models import Question, Answer
 
 MAXIMUM_POSTTYPE = 2 # 최대 게시판 개수
-MAXIMUM_DISPLAYED_COUNT = 3 # 최대 조회수 / 최대 답변 게시글 개수
+MAXIMUM_DISPLAYED_COUNT = 5 # 최대 조회수 / 최대 답변 게시글 개수
 POSTTYPE = ['자유 게시판', '파이썬 게시판', '자바 게시판']
 
 def get_recently_answered_list():
@@ -48,7 +49,7 @@ def get_question_board_list_result(board_id, query, type):
 class QuestionListView(ListView):
     model = Question
     template_name = 'pybo/question_list.html'
-    paginate_by = 10
+    paginate_by = 15
     context_object_name = 'question_list'
 
     def get_context_data(self, **kwargs):
@@ -56,7 +57,8 @@ class QuestionListView(ListView):
         context['greatest_hits_list'] = Question.objects.order_by('-hits')[:MAXIMUM_DISPLAYED_COUNT]
         context['recently_answered_list'] = get_recently_answered_list()
         context['query'] = self.request.GET.get('query', None) 
-        context['type'] = self.request.GET.get('type', None) 
+        context['type'] = self.request.GET.get('type', None)
+        context['greatest_recommended_answer'] = Answer.objects.annotate(recommend_count=Count('voter')).order_by('-recommend_count')
         return context
 
     def get_queryset(self):

@@ -13,8 +13,8 @@
 <!-- 검색형식 url 고안 -->
 <!-- ?page=페이지&query=질의&type=검색형식 -->
 
-<div class="container-fluid my-3 px-5">
-    <div class="row pb-2 justify-content-center"> 
+<div class="container-fluid my-3">
+    <div class="row pb-2 justify-content-center mx-5 px-5"> 
         <div class="col-2"></div>
         <div class="form-inline col-9 justify-content-end">
             <select id="search_type" class="form-control mr-2">
@@ -26,7 +26,7 @@
             <input type="button" class="btn btn-dark" id="search_btn" onclick="search(this);" value="검색">
         </div>
     </div>
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mx-5 px-5">
         <div class="col-2 justify-content-center" style="font-size:12px;">
                 <div class="text-center mb-2">최다 조회수 게시글</div>
                 <ul class="list-group list-group-flush mb-3">
@@ -40,6 +40,7 @@
                         </li>
                     {% endfor %}
                 </ul>
+
                 <div class="text-center mb-2">최근 답변이 달린 게시글</div>
                 <ul class="list-group list-group-flush">
                     {% for post in recently_answered_list %}
@@ -50,6 +51,21 @@
                                 {{ post.answer_set.count }}
                             </span>
                             {% endif %}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="text-center mb-2">가장 추천을 많이 받은 답변</div>
+                <ul class="list-group list-group-flush">
+                    {% for answer in greatest_recommended_answer %}
+                        <li class="list-group-item">
+                            <a href="{% url 'pybo:detail' answer.question.id %}" style="color: black;">
+                                {% if answer.content|convert_html_to_text|length <= 10 %}
+                                    {{ answer.content|convert_html_to_text  }}   
+                                {% else %}
+                                    {{ answer.content|convert_html_to_text|slice:':10'}} ..
+                                {% endif %}                      
+                            </a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -71,7 +87,7 @@
                 {% if question_list %}
                 {% for question in question_list %}
                 <tr class="text-center">
-                    <td>{{forloop.counter}}</td>
+                    <td>{{ question.id }}</td>
                     <td>
                         {% if question.voter.all.count > 0 %}
                         <span class="badge bg-warning px-2 py-1">
@@ -105,7 +121,7 @@
                         </a>
                     </td>
                     <td><a href="{% url 'common:profile_view' question.author.id %}">{{question.author.username}}</a></td>
-                    <td>{{question.create_date}}</td>
+                    <td>{{question.create_date | date:'Y.n.j H:i'}}</td>
                     <td>{{question.hits}}</td>
                 </tr>
                 {% endfor %}
@@ -121,14 +137,14 @@
         </div>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mx-5 px-5">
         <div class="col-2"></div>
         <div class="col-9 col-sm-9 justify-content-end">
             <a href="{% url 'pybo:question_create' %}" class="btn btn btn-dark float-right">질문 등록하기</a>
         </div>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mx-5 px-5">
         <div class="col-2"></div>
         <div class="col-9 col-sm-9">
             <ul class="pagination justify-content-center">
