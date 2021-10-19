@@ -6,7 +6,7 @@ from django.views.generic import ListView, DetailView
 from django.db.models import Count
 
 
-from django.db.models import Q
+from django.db.models import Q, F, Count
 
 from ..models import Question, Answer
 
@@ -116,7 +116,14 @@ class QuestionDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
         answer_page_id = self.request.GET.get('page', '1')
-        paginator = Paginator(Answer.objects.filter(question=self.get_object()).order_by('-voter'), 3)
+        answer_list = Answer.objects.filter(
+            question=self.get_object()
+        ).annotate(
+            num_voter_count=Count('voter') 
+        ).order_by(
+            '-num_voter_count'
+        )
+        paginator = Paginator(answer_list, 3)
         page_obj = paginator.get_page(answer_page_id)
         context['answer_list'] = page_obj
         return context
