@@ -31,12 +31,14 @@
 {% block content %}
 <div class="container my-3">
     {% if messages %}
-    <div class="alert alert-danger my-3" role="alert">
         {% for message in messages %}
-        <strong>{{ message.tags }}</strong>
-        <ul><li>{{ message.message }}</li></ul>
+            {% if not message.tags == 'success' %}
+            <div class="alert alert-danger my-3" role="alert">
+                <strong>{{ message.tags }}</strong>
+                <ul><li>{{ message.message }}</li></ul>
+            </div>
+            {% endif %}
         {% endfor %}
-    </div>
     {% endif %}
     <h2 class="border-bottom py-2"> {{ question.subject }} </h2>
     <div class="row my-3">

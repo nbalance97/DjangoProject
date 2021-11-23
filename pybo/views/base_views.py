@@ -111,9 +111,11 @@ class QuestionDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         target_question = self.get_object()
-        target_question.hits += 1
+        # target_question.hits += 1
+        # race condition 해결을 위한 F() 사용
+        target_question.hits = F('hits') + 1
         target_question.save()
-
+        target_question.refresh_from_db()
         return super(QuestionDetailView, self).get(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
