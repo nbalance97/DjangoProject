@@ -2,6 +2,12 @@
 
 Python Django Pybo 게시판 프로젝트
 
+## 사용
+- Django
+- DjangoRestFramework
+- Django-AllAuth
+- Django-Braces
+
 ## 소개
 
 - Do it! 점프 투 장고 교재의 Pybo 게시판 실습 프로젝트 기반
@@ -130,9 +136,9 @@ Python Django Pybo 게시판 프로젝트
     port = 3306
     ```
 
-9. 댓글 / 답변 시 게시글/답변 주인에게 알림 가는 기능 구현
-    - API가 아닌 페이지 로딩 시 알림을 로드하게 되면 페이지 로딩하는 모든 뷰에 알림 로드 부분을 추가해야 하는 문제가 있음..
-    - 따라서, API를 만든 후, Navbar 불러올 때 API 호출하여 알림을 불러오는 기능 추가
+9. 댓글 / 답변 시 게시글/답변 주인에게 배지 알림 가는 기능 구현
+    - API가 아닌 페이지 로딩 시 알림을 불러오게 되면 페이지 로딩하는 모든 뷰에 알림 로드 부분을 추가해야 하는 문제
+    - 따라서, API를 만든 후, Navbar 불러올 때 JavaScript 상에서 API 호출하여 알림을 불러오는 기능 추가
     - API 구현은 DjangoRestFramework를 사용하여 쉽게 구현
     - API 호출 시 로그인 여부 확인하여 로그인 되어있지 않으면 PermissionDenied 반환
 

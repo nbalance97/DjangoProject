@@ -59,9 +59,6 @@ class QuestionListView(ListView):
         context['query'] = self.request.GET.get('query', None) 
         context['type'] = self.request.GET.get('type', None)
         context['greatest_recommended_answer'] = Answer.objects.annotate(recommend_count=Count('voter')).order_by('-recommend_count')[:10]
-
-        print(self.request.path_info)
-
         return context
 
     def get_queryset(self):
